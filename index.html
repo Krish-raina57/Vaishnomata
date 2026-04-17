@@ -11,7 +11,6 @@
   --gold:    #fbbf24;
   --deep:    #0d1b2e;
   --ink:     #1c1c2e;
-  --cream:   #fdf6ec;
   --glass:   rgba(255,255,255,0.93);
 }
 
@@ -30,7 +29,6 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--deep);
   animation:tw var(--d) infinite alternate; opacity:0;
 }
 @keyframes tw{0%{opacity:0;transform:scale(.8)}100%{opacity:var(--op);transform:scale(1.3)}}
-
 #mountains { position:fixed;bottom:0;left:0;right:0;pointer-events:none;z-index:1; }
 #petals-wrap { position:fixed;inset:0;pointer-events:none;z-index:0; }
 .petal { position:absolute;animation:pfall linear infinite;opacity:0; }
@@ -45,8 +43,8 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--deep);
   transition:opacity .5s ease, transform .5s cubic-bezier(.4,0,.2,1);
   transform:translateX(50px);
   z-index:5;
-  overflow-y: auto;
-  padding: 16px 0;
+  overflow-y:auto;
+  padding:16px 0;
 }
 .page.active  { opacity:1; pointer-events:all; transform:translateX(0); z-index:10; }
 .page.ex-left { opacity:0; transform:translateX(-50px); }
@@ -116,7 +114,7 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--deep);
 }
 .btn:hover{background:var(--gold);color:var(--ink);transform:translateY(-3px);box-shadow:0 10px 30px rgba(251,191,36,.35);}
 
-/* ══ MEMORY PAGE CARD ══ */
+/* ══ MEMORY CARD ══ */
 .mem-card {
   width:min(500px,95vw);
   background:rgba(13,27,46,.65);
@@ -127,76 +125,44 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--deep);
   position:relative;z-index:2;
 }
 
-/* Photo slot */
+/* ── Photo zone (static, no click) ── */
 .photo-zone {
   position:relative;width:100%;
   height:clamp(210px,40vw,290px);
-  background:linear-gradient(135deg,#1e3a60,#2d5080);
-  cursor:pointer;overflow:hidden;
+  background:#0d1b2e;
+  overflow:hidden;
 }
 .photo-zone img {
   width:100%;height:100%;object-fit:cover;display:block;
-  transition:transform .4s ease;
+  transition:transform .5s ease;
 }
-.photo-zone:hover img{transform:scale(1.04);}
-.ph-placeholder{
-  position:absolute;inset:0;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:6px;pointer-events:none;
-}
-.ph-placeholder .bigicon{font-size:3rem;opacity:.4;}
-.ph-placeholder .phtext{font-size:.74rem;color:rgba(255,255,255,.35);}
-.upload-label{
-  position:absolute;bottom:10px;left:50%;transform:translateX(-50%);
-  background:rgba(0,0,0,.42);border:1px solid rgba(255,255,255,.16);
-  border-radius:20px;padding:4px 14px;
-  font-size:.71rem;color:rgba(255,255,255,.6);
-  pointer-events:none;backdrop-filter:blur(6px);
-}
+.photo-zone:hover img { transform:scale(1.04); }
 .pg-badge{
   position:absolute;top:12px;left:14px;
   background:rgba(0,0,0,.45);backdrop-filter:blur(8px);
   border-radius:20px;padding:3px 10px;
   font-size:.7rem;color:var(--gold);font-weight:500;letter-spacing:.5px;
   border:1px solid rgba(251,191,36,.25);
+  z-index:3;
 }
 
-/* ══ VIDEO ZONE ══ */
+/* ── Video zone (static, no click) ── */
 .video-zone {
   position:relative;width:100%;
   height:clamp(210px,40vw,290px);
-  background:linear-gradient(135deg,#1a2e50,#0f1f3a);
+  background:#0a1520;
   overflow:hidden;
 }
 .video-zone video {
   width:100%;height:100%;object-fit:cover;display:block;
-}
-.vid-placeholder{
-  position:absolute;inset:0;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:10px;cursor:pointer;
-}
-.vid-placeholder .play-ring{
-  width:64px;height:64px;border-radius:50%;
-  border:2px solid rgba(251,191,36,.5);
-  background:rgba(249,115,22,.15);
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.8rem;
-  animation:pulse-ring 2s infinite;
 }
 @keyframes pulse-ring{
   0%{box-shadow:0 0 0 0 rgba(249,115,22,.4);}
   70%{box-shadow:0 0 0 18px rgba(249,115,22,0);}
   100%{box-shadow:0 0 0 0 rgba(249,115,22,0);}
 }
-.vid-placeholder .vid-text{font-size:.74rem;color:rgba(255,255,255,.4);}
-.vid-upload-label{
-  position:absolute;bottom:10px;left:50%;transform:translateX(-50%);
-  background:rgba(0,0,0,.42);border:1px solid rgba(255,255,255,.16);
-  border-radius:20px;padding:4px 14px;
-  font-size:.71rem;color:rgba(255,255,255,.6);
-  pointer-events:none;backdrop-filter:blur(6px);
-}
 
-/* Caption block */
+/* ── Caption block ── */
 .mem-body{padding:18px 22px 16px;}
 .mem-body .tag{
   font-size:.7rem;color:var(--saffron);
@@ -208,7 +174,7 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--deep);
 }
 .mem-body .caption{font-size:.87rem;color:rgba(255,255,255,.68);line-height:1.78;}
 
-/* Nav row */
+/* ── Nav row ── */
 .nav-row{
   display:flex;align-items:center;justify-content:space-between;
   padding:0 22px 18px;gap:10px;
@@ -224,7 +190,7 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--deep);
 .gold-btn{background:var(--gold)!important;color:var(--ink)!important;border-color:var(--gold)!important;font-weight:600!important;}
 .gold-btn:hover{background:#e6a817!important;box-shadow:0 4px 18px rgba(251,191,36,.4)!important;}
 
-/* Dot strip */
+/* ── Dot strip ── */
 .dots-strip{display:flex;gap:5px;align-items:center;}
 .ds{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2);transition:.3s;}
 .ds.on{background:var(--gold);transform:scale(1.5);}
@@ -309,11 +275,9 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--deep);
 <!-- ═══════ MEMORY 1 ═══════ -->
 <div class="page" id="pg-m1">
   <div class="mem-card">
-    <div class="photo-zone" onclick="pick(0)">
-      <img id="img0" src="" style="display:none"/>
-      <div class="ph-placeholder" id="ph0"><div class="bigicon">🚌</div><div class="phtext">Tap to add your photo</div></div>
+    <div class="photo-zone">
       <div class="pg-badge">✦ Memory 1 of 7</div>
-      <img src="images/beginning.jpeg" alt="The Beginning Memory">
+      <img src="images/beginning.jpeg" alt="The Beginning"/>
     </div>
     <div class="mem-body">
       <div class="tag">The Beginning</div>
@@ -331,11 +295,9 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--deep);
 <!-- ═══════ MEMORY 2 ═══════ -->
 <div class="page" id="pg-m2">
   <div class="mem-card">
-    <div class="photo-zone" onclick="pick(1)">
-      <img id="img1" src="" style="display:none"/>
-      <div class="ph-placeholder" id="ph1"><div class="bigicon">🌄</div><div class="phtext">Tap to add your photo</div></div>
+    <div class="photo-zone">
       <div class="pg-badge">✦ Memory 2 of 7</div>
-      <img src="images/mountains.jpeg" alt="The Mountains Memory">
+      <img src="images/mountains.jpeg" alt="The Mountains"/>
     </div>
     <div class="mem-body">
       <div class="tag">The Mountains</div>
@@ -353,11 +315,9 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--deep);
 <!-- ═══════ MEMORY 3 ═══════ -->
 <div class="page" id="pg-m3">
   <div class="mem-card">
-    <div class="photo-zone" onclick="pick(2)">
-      <img id="img2" src="" style="display:none"/>
-      <div class="ph-placeholder" id="ph2"><div class="bigicon">🪔</div><div class="phtext">Tap to add your photo</div></div>
+    <div class="photo-zone">
       <div class="pg-badge">✦ Memory 3 of 7</div>
-      <img src="images/darshan.jpeg" alt="Darshan Memory">
+      <img src="images/darshan.jpeg" alt="Mata ke Darshan"/>
     </div>
     <div class="mem-body">
       <div class="tag">The Darshan</div>
@@ -375,11 +335,9 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--deep);
 <!-- ═══════ MEMORY 4 ═══════ -->
 <div class="page" id="pg-m4">
   <div class="mem-card">
-    <div class="photo-zone" onclick="pick(3)">
-      <img id="img3" src="" style="display:none"/>
-      <div class="ph-placeholder" id="ph3"><div class="bigicon">🥰</div><div class="phtext">Tap to add your photo</div></div>
+    <div class="photo-zone">
       <div class="pg-badge">✦ Memory 4 of 7</div>
-      <img src="images/together.jpeg" alt="Us Together Memory">
+      <img src="images/together.jpeg" alt="Us Together"/>
     </div>
     <div class="mem-body">
       <div class="tag">Us Together</div>
@@ -397,11 +355,9 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--deep);
 <!-- ═══════ MEMORY 5 ═══════ -->
 <div class="page" id="pg-m5">
   <div class="mem-card">
-    <div class="photo-zone" onclick="pick(4)">
-      <img id="img4" src="" style="display:none"/>
-      <div class="ph-placeholder" id="ph4"><div class="bigicon">🌙</div><div class="phtext">Tap to add your photo</div></div>
+    <div class="photo-zone">
       <div class="pg-badge">✦ Memory 5 of 7</div>
-      <img src="images/aarti.jpeg" alt="Evening Aarti Memory">
+      <img src="images/aarti.jpeg" alt="Evening Aarti"/>
     </div>
     <div class="mem-body">
       <div class="tag">The Evening</div>
@@ -419,11 +375,9 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--deep);
 <!-- ═══════ MEMORY 6 ═══════ -->
 <div class="page" id="pg-m6">
   <div class="mem-card">
-    <div class="photo-zone" onclick="pick(5)">
-      <img id="img5" src="" style="display:none"/>
-      <div class="ph-placeholder" id="ph5"><div class="bigicon">🌸</div><div class="phtext">Tap to add your photo</div></div>
+    <div class="photo-zone">
       <div class="pg-badge">✦ Memory 6 of 7</div>
-      <img src="images/return.jpeg" alt="Return Memory">
+      <img src="images/return.jpeg" alt="The Return"/>
     </div>
     <div class="mem-body">
       <div class="tag">The Return</div>
@@ -441,18 +395,12 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--deep);
 <!-- ═══════ MEMORY 7 – VIDEO ═══════ -->
 <div class="page" id="pg-m7">
   <div class="mem-card">
-    <!-- Video Zone -->
     <div class="video-zone">
-      <video id="vid0" controls style="display:none"></video>
-      <div class="vid-placeholder" id="vph0" onclick="pickVid()">
-        <div class="play-ring">🎬</div>
-        <video width="80%" controls>
-  <source src="images/end.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-      </div>
       <div class="pg-badge">✦ Memory 7 of 7</div>
-      <div class="vid-upload-label" id="vid-upload-label">🎥 Click to upload video</div>
+      <video controls preload="metadata">
+        <source src="images/end.mp4" type="video/mp4"/>
+        Your browser does not support video.
+      </video>
     </div>
     <div class="mem-body">
       <div class="tag">The End 😂</div>
@@ -472,7 +420,6 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--deep);
   <div class="final-wrap">
     <span class="bflame">🪔</span>
     <h3>For You, Always</h3>
-    <!-- ✏️ EDIT THE POEM BELOW — write whatever is in your heart -->
     <div class="poem">In the mountains of Vaishno,
 where the air is pure and still,
 I found my greatest blessing —
@@ -492,19 +439,13 @@ wherever life shall go.</div>
   </div>
 </div>
 
-<!-- Hidden file pickers -->
-<input type="file" id="filePicker"  accept="image/*"  style="display:none" onchange="loadImg(event)"/>
-<input type="file" id="vidPicker"   accept="video/*"  style="display:none" onchange="loadVid(event)"/>
-
 <script>
-/* ══ CONFIG ══ */
-const CODE  = "1104";
-const ORDER = ['pg-lock','pg-welcome','pg-m1','pg-m2','pg-m3','pg-m4','pg-m5','pg-m6','pg-m7','pg-final'];
-const MEM_IDS = ['pg-m1','pg-m2','pg-m3','pg-m4','pg-m5','pg-m6','pg-m7'];
+const CODE     = "1104";
+const ORDER    = ['pg-lock','pg-welcome','pg-m1','pg-m2','pg-m3','pg-m4','pg-m5','pg-m6','pg-m7','pg-final'];
+const MEM_IDS  = ['pg-m1','pg-m2','pg-m3','pg-m4','pg-m5','pg-m6','pg-m7'];
 
 let curIdx = 0;
 let entered = "";
-let slot = 0;
 
 /* ── Passcode ── */
 function kp(n) {
@@ -542,8 +483,7 @@ function goTo(id) {
   }
   curIdx = ORDER.indexOf(id);
   if (curIdx < 0) curIdx = 0;
-  const newEl = document.getElementById(id);
-  if (newEl) newEl.classList.add('active');
+  document.getElementById(id).classList.add('active');
   buildDots();
 }
 
@@ -555,40 +495,15 @@ function buildDots() {
     strip.innerHTML = '';
     MEM_IDS.forEach((_,j)=>{
       const d = document.createElement('div');
-      d.className = 'ds' + (j===i?' on':'');
+      d.className = 'ds'+(j===i?' on':'');
       strip.appendChild(d);
     });
   });
 }
 buildDots();
 
-/* ── Photo upload ── */
-function pick(s){ slot=s; document.getElementById('filePicker').click(); }
-function loadImg(e){
-  const f=e.target.files[0]; if(!f) return;
-  const r=new FileReader();
-  r.onload=ev=>{
-    const img=document.getElementById('img'+slot);
-    img.src=ev.target.result; img.style.display='block';
-    const ph=document.getElementById('ph'+slot); if(ph) ph.style.display='none';
-  };
-  r.readAsDataURL(f); e.target.value='';
-}
-
-/* ── Video upload ── */
-function pickVid(){ document.getElementById('vidPicker').click(); }
-function loadVid(e){
-  const f=e.target.files[0]; if(!f) return;
-  const url=URL.createObjectURL(f);
-  const vid=document.getElementById('vid0');
-  vid.src=url; vid.style.display='block';
-  const vph=document.getElementById('vph0'); if(vph) vph.style.display='none';
-  const lbl=document.getElementById('vid-upload-label'); if(lbl) lbl.style.display='none';
-  e.target.value='';
-}
-
 /* ── Stars ── */
-const scene=document.getElementById('scene');
+const scene = document.getElementById('scene');
 for(let i=0;i<130;i++){
   const s=document.createElement('div'); s.className='star';
   const sz=Math.random()*2.5+.8;
