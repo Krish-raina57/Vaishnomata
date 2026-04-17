@@ -1,588 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Our Vaishno Devi ✨</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-<style>
-:root {
-  --saffron: #f97316;
-  --gold:    #fbbf24;
-  --deep:    #0d1b2e;
-  --ink:     #1c1c2e;
-  --cream:   #fdf6ec;
-  --glass:   rgba(255,255,255,0.93);
-}
-
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html, body { width:100%; height:100%; overflow:hidden; background:var(--deep);
-  font-family:'DM Sans',sans-serif; color:white; }
-
-/* ── BG ── */
-#scene {
-  position:fixed; inset:0;
-  background:linear-gradient(175deg,#0d1b2e 0%,#142240 50%,#1e3460 100%);
-  z-index:0;
-}
-.star {
-  position:absolute; border-radius:50%; background:white;
-  animation:tw var(--d) infinite alternate; opacity:0;
-}
-@keyframes tw{0%{opacity:0;transform:scale(.8)}100%{opacity:var(--op);transform:scale(1.3)}}
-
-#mountains { position:fixed;bottom:0;left:0;right:0;pointer-events:none;z-index:1; }
-#petals-wrap { position:fixed;inset:0;pointer-events:none;z-index:0; }
-.petal { position:absolute;animation:pfall linear infinite;opacity:0; }
-@keyframes pfall{0%{opacity:.7;transform:translateY(-10px) rotate(0deg)}100%{opacity:0;transform:translateY(105vh) rotate(720deg)}}
-
-/* ── PAGE SYSTEM ── */
-.page {
-  position:fixed; inset:0;
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  opacity:0; pointer-events:none;
-  transition:opacity .5s ease, transform .5s cubic-bezier(.4,0,.2,1);
-  transform:translateX(50px);
-  z-index:5;
-  overflow-y: auto;
-  padding: 16px 0;
-}
-.page.active  { opacity:1; pointer-events:all; transform:translateX(0); z-index:10; }
-.page.ex-left { opacity:0; transform:translateX(-50px); }
-
-/* ══ PASSCODE ══ */
-#pg-lock { z-index:20; }
-.lock-wrap {
-  background:var(--glass); border-radius:26px;
-  padding:38px 34px 28px; width:min(360px,91vw);
-  text-align:center;
-  box-shadow:0 40px 100px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.12);
-  animation:riseUp .8s cubic-bezier(.22,1,.36,1) both;
-}
-@keyframes riseUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
-.flame { font-size:2.6rem;display:block;animation:flicker 2.2s infinite alternate; }
-@keyframes flicker{0%{filter:drop-shadow(0 0 5px #f97316)}100%{filter:drop-shadow(0 0 18px #fbbf24) brightness(1.15)}}
-.lock-wrap h1 {
-  font-family:'Cormorant Garamond',serif; font-size:1.65rem; font-weight:600;
-  color:var(--ink); line-height:1.25; margin:8px 0 4px;
-}
-.lock-wrap .sub { font-size:.8rem; color:#78716c; margin-bottom:22px; }
-.code-row { display:flex;gap:10px;justify-content:center;margin-bottom:22px; }
-.box {
-  width:46px;height:46px; border:2px solid #e2c4a0; border-radius:10px;
-  background:#fef9f5; display:flex;align-items:center;justify-content:center;
-  font-size:1.5rem;font-weight:700;color:var(--saffron); transition:.2s;
-}
-.box.lit {
-  background:var(--saffron);border-color:var(--saffron);color:white;
-  transform:scale(1.1);box-shadow:0 4px 16px rgba(249,115,22,.4);
-}
-.pad { display:grid;grid-template-columns:repeat(3,1fr);gap:9px;max-width:210px;margin:0 auto 16px; }
-.k {
-  height:50px;border:none;border-radius:11px;background:#f1ece6;color:var(--ink);
-  font-family:'DM Sans',sans-serif;font-size:1.2rem;font-weight:500;
-  cursor:pointer;transition:.15s;user-select:none;
-}
-.k:hover{background:var(--saffron);color:white;transform:scale(1.07);}
-.k:active{transform:scale(.94);}
-.k-zero{grid-column:2;}
-.k-del{background:#fee2e2;color:#ef4444;}
-.k-del:hover{background:#ef4444;color:white;}
-.err{min-height:18px;font-size:.78rem;color:#ef4444;font-weight:500;animation:wobble .3s;}
-@keyframes wobble{0%,100%{transform:translateX(0)}30%{transform:translateX(-7px)}70%{transform:translateX(7px)}}
-
-/* ══ WELCOME ══ */
-#pg-welcome { text-align:center;padding:20px; }
-.welcome-inner { max-width:480px;z-index:2;position:relative; }
-.w-icons{font-size:2.2rem;letter-spacing:5px;margin-bottom:18px;animation:fadeSlide .8s both .2s;}
-.w-title{
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(2rem,7vw,3rem);font-weight:600;font-style:italic;
-  color:var(--gold);line-height:1.15;
-  text-shadow:0 2px 24px rgba(251,191,36,.25);
-  margin-bottom:16px;animation:fadeSlide .8s both .35s;
-}
-.w-body{font-size:.95rem;color:rgba(255,255,255,.78);line-height:1.85;margin-bottom:30px;animation:fadeSlide .8s both .5s;}
-@keyframes fadeSlide{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-
-/* ══ SHARED BUTTON ══ */
-.btn {
-  display:inline-flex;align-items:center;gap:8px;
-  padding:13px 36px;border-radius:50px;
-  border:2px solid var(--gold);background:transparent;color:var(--gold);
-  font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:500;
-  cursor:pointer;transition:.25s;letter-spacing:.3px;
-}
-.btn:hover{background:var(--gold);color:var(--ink);transform:translateY(-3px);box-shadow:0 10px 30px rgba(251,191,36,.35);}
-
-/* ══ MEMORY PAGE CARD ══ */
-.mem-card {
-  width:min(500px,95vw);
-  background:rgba(13,27,46,.65);
-  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:26px;overflow:hidden;
-  box-shadow:0 40px 100px rgba(0,0,0,.6);
-  position:relative;z-index:2;
-}
-
-/* Photo slot */
-.photo-zone {
-  position:relative;width:100%;
-  height:clamp(210px,40vw,290px);
-  background:linear-gradient(135deg,#1e3a60,#2d5080);
-  cursor:pointer;overflow:hidden;
-}
-.photo-zone img {
-  width:100%;height:100%;object-fit:cover;display:block;
-  transition:transform .4s ease;
-}
-.photo-zone:hover img{transform:scale(1.04);}
-.ph-placeholder{
-  position:absolute;inset:0;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:6px;pointer-events:none;
-}
-.ph-placeholder .bigicon{font-size:3rem;opacity:.4;}
-.ph-placeholder .phtext{font-size:.74rem;color:rgba(255,255,255,.35);}
-.upload-label{
-  position:absolute;bottom:10px;left:50%;transform:translateX(-50%);
-  background:rgba(0,0,0,.42);border:1px solid rgba(255,255,255,.16);
-  border-radius:20px;padding:4px 14px;
-  font-size:.71rem;color:rgba(255,255,255,.6);
-  pointer-events:none;backdrop-filter:blur(6px);
-}
-.pg-badge{
-  position:absolute;top:12px;left:14px;
-  background:rgba(0,0,0,.45);backdrop-filter:blur(8px);
-  border-radius:20px;padding:3px 10px;
-  font-size:.7rem;color:var(--gold);font-weight:500;letter-spacing:.5px;
-  border:1px solid rgba(251,191,36,.25);
-}
-
-/* ══ VIDEO ZONE ══ */
-.video-zone {
-  position:relative;width:100%;
-  height:clamp(210px,40vw,290px);
-  background:linear-gradient(135deg,#1a2e50,#0f1f3a);
-  overflow:hidden;
-}
-.video-zone video {
-  width:100%;height:100%;object-fit:cover;display:block;
-}
-.vid-placeholder{
-  position:absolute;inset:0;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:10px;cursor:pointer;
-}
-.vid-placeholder .play-ring{
-  width:64px;height:64px;border-radius:50%;
-  border:2px solid rgba(251,191,36,.5);
-  background:rgba(249,115,22,.15);
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.8rem;
-  animation:pulse-ring 2s infinite;
-}
-@keyframes pulse-ring{
-  0%{box-shadow:0 0 0 0 rgba(249,115,22,.4);}
-  70%{box-shadow:0 0 0 18px rgba(249,115,22,0);}
-  100%{box-shadow:0 0 0 0 rgba(249,115,22,0);}
-}
-.vid-placeholder .vid-text{font-size:.74rem;color:rgba(255,255,255,.4);}
-.vid-upload-label{
-  position:absolute;bottom:10px;left:50%;transform:translateX(-50%);
-  background:rgba(0,0,0,.42);border:1px solid rgba(255,255,255,.16);
-  border-radius:20px;padding:4px 14px;
-  font-size:.71rem;color:rgba(255,255,255,.6);
-  pointer-events:none;backdrop-filter:blur(6px);
-}
-
-/* Caption block */
-.mem-body{padding:18px 22px 16px;}
-.mem-body .tag{
-  font-size:.7rem;color:var(--saffron);
-  text-transform:uppercase;letter-spacing:1.5px;font-weight:500;margin-bottom:5px;
-}
-.mem-body .heading{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.45rem;font-weight:600;color:white;line-height:1.2;margin-bottom:9px;
-}
-.mem-body .caption{font-size:.87rem;color:rgba(255,255,255,.68);line-height:1.78;}
-
-/* Nav row */
-.nav-row{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 22px 18px;gap:10px;
-}
-.nav-btn{
-  height:38px;padding:0 16px;border-radius:50px;
-  border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);
-  color:rgba(255,255,255,.68);font-family:'DM Sans',sans-serif;
-  font-size:.82rem;cursor:pointer;transition:.2s;
-  display:flex;align-items:center;gap:5px;
-}
-.nav-btn:hover{background:rgba(255,255,255,.13);color:white;border-color:rgba(255,255,255,.28);}
-.gold-btn{background:var(--gold)!important;color:var(--ink)!important;border-color:var(--gold)!important;font-weight:600!important;}
-.gold-btn:hover{background:#e6a817!important;box-shadow:0 4px 18px rgba(251,191,36,.4)!important;}
-
-/* Dot strip */
-.dots-strip{display:flex;gap:5px;align-items:center;}
-.ds{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2);transition:.3s;}
-.ds.on{background:var(--gold);transform:scale(1.5);}
-
-/* ══ FINAL ══ */
-.final-wrap{
-  background:var(--glass);border-radius:28px;
-  padding:40px 34px 34px;width:min(400px,91vw);
-  text-align:center;box-shadow:0 40px 100px rgba(0,0,0,.55);
-  position:relative;z-index:2;
-}
-.final-wrap .bflame{font-size:2.8rem;display:block;animation:flicker 2s infinite alternate;margin-bottom:8px;}
-.final-wrap h3{
-  font-family:'Cormorant Garamond',serif;
-  font-style:italic;font-size:1.55rem;color:var(--ink);margin-bottom:18px;
-}
-.poem{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  color:#3d3d3d;font-size:.94rem;line-height:2.1;white-space:pre-line;margin-bottom:22px;
-}
-.final-sig{font-family:'Cormorant Garamond',serif;color:var(--saffron);font-size:1.1rem;font-weight:600;}
-.replay-btn{
-  margin-top:20px;display:inline-flex;align-items:center;gap:6px;
-  padding:9px 22px;border-radius:50px;
-  border:2px solid var(--saffron);background:transparent;
-  color:var(--saffron);font-family:'DM Sans',sans-serif;
-  font-size:.82rem;font-weight:500;cursor:pointer;transition:.25s;
-}
-.replay-btn:hover{background:var(--saffron);color:white;}
-</style>
+  <meta charset="UTF-8">
+  <title>Our Vaishno Devi Memories</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header {
+      background: #800000;
+      color: white;
+      padding: 20px;
+    }
+    .memory {
+      background: white;
+      margin: 20px auto;
+      padding: 20px;
+      width: 80%;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .memory h2 {
+      color: #800000;
+    }
+    .memory img, .memory video {
+      width: 80%;
+      max-width: 600px;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+    footer {
+      background: #800000;
+      color: white;
+      padding: 15px;
+      margin-top: 30px;
+    }
+  </style>
 </head>
 <body>
 
-<div id="scene"></div>
-<div id="mountains"></div>
-<div id="petals-wrap"></div>
+<header>
+  <h1>Our Vaishno Devi Memories</h1>
+  <p>For You, Always ❤️</p>
+</header>
 
-<!-- ═══════ PAGE 1 – LOCK ═══════ -->
-<div class="page active" id="pg-lock">
-  <div class="lock-wrap">
-    <span class="flame">🪔</span>
-    <h1>Our Vaishno Devi<br>Memories</h1>
-    <p class="sub">Enter passcode to unlock ✨</p>
-    <div class="code-row">
-      <div class="box" id="b0">✦</div>
-      <div class="box" id="b1">✦</div>
-      <div class="box" id="b2">✦</div>
-      <div class="box" id="b3">✦</div>
-    </div>
-    <div class="pad">
-      <button class="k" onclick="kp('1')">1</button>
-      <button class="k" onclick="kp('2')">2</button>
-      <button class="k" onclick="kp('3')">3</button>
-      <button class="k" onclick="kp('4')">4</button>
-      <button class="k" onclick="kp('5')">5</button>
-      <button class="k" onclick="kp('6')">6</button>
-      <button class="k" onclick="kp('7')">7</button>
-      <button class="k" onclick="kp('8')">8</button>
-      <button class="k" onclick="kp('9')">9</button>
-      <div></div>
-      <button class="k k-zero" onclick="kp('0')">0</button>
-      <button class="k k-del" onclick="kdel()">⌫</button>
-    </div>
-    <div class="err" id="err"></div>
-  </div>
+<div class="memory">
+  <h2>The Beginning</h2>
+  <p>Our journey started with prayers and packing...</p>
+  <img src="images/beginning.jpeg" alt="The Beginning Memory">
 </div>
 
-<!-- ═══════ PAGE 2 – WELCOME ═══════ -->
-<div class="page" id="pg-welcome">
-  <div class="welcome-inner">
-    <div class="w-icons">🏔️ 🪔 ❤️ 🌙</div>
-    <h2 class="w-title">A trip written<br>in the stars</h2>
-    <p class="w-body">
-      Every step on those mountains was a prayer.<br>
-      Every moment with you — a blessing.<br>
-      Here are our Vaishno Devi memories,<br>just for us. 🙏
-    </p>
-    <button class="btn" onclick="goTo('pg-m1')">Begin our story →</button>
-  </div>
+<div class="memory">
+  <h2>The Mountains</h2>
+  <p>The sacred landscapes filled us with peace...</p>
+  <img src="images/mountains.jpeg" alt="The Mountains Memory">
 </div>
 
-<!-- ═══════ MEMORY 1 ═══════ -->
-<div class="page" id="pg-m1">
-  <div class="mem-card">
-    <div class="photo-zone" onclick="pick(0)">
-      <img id="img0" src="" style="display:none"/>
-      <div class="ph-placeholder" id="ph0"><div class="bigicon">🚌</div><div class="phtext">Tap to add your photo</div></div>
-      <div class="pg-badge">✦ Memory 1 of 7</div>
-      <img src="images/beginning.jpeg" alt="The Beginning Memory">
-    </div>
-    <div class="mem-body">
-      <div class="tag">The Beginning</div>
-      <div class="heading">The Journey Starts 🚌</div>
-      <div class="caption">We packed our bags, said our prayers and stepped out together — not knowing this trip would become one of our most treasured memories ever.</div>
-    </div>
-    <div class="nav-row">
-      <button class="nav-btn" onclick="goTo('pg-welcome')">← Back</button>
-      <div class="dots-strip" id="ds1"></div>
-      <button class="nav-btn gold-btn" onclick="goTo('pg-m2')">Next →</button>
-    </div>
-  </div>
+<div class="memory">
+  <h2>The Darshan</h2>
+  <p>Standing before Mata Vaishno Devi with folded hands...</p>
+  <img src="images/darshan.jpeg" alt="Darshan Memory">
 </div>
 
-<!-- ═══════ MEMORY 2 ═══════ -->
-<div class="page" id="pg-m2">
-  <div class="mem-card">
-    <div class="photo-zone" onclick="pick(1)">
-      <img id="img1" src="" style="display:none"/>
-      <div class="ph-placeholder" id="ph1"><div class="bigicon">🌄</div><div class="phtext">Tap to add your photo</div></div>
-      <div class="pg-badge">✦ Memory 2 of 7</div>
-      <img src="images/mountains.jpeg" alt="The Mountains Memory">
-    </div>
-    <div class="mem-body">
-      <div class="tag">The Mountains</div>
-      <div class="heading">On Sacred Ground 🏔️</div>
-      <div class="caption">The mountains stood tall and silent around us. The cold air, the tall pines, and you beside me — it felt like a dream wrapped in a prayer.</div>
-    </div>
-    <div class="nav-row">
-      <button class="nav-btn" onclick="goTo('pg-m1')">← Back</button>
-      <div class="dots-strip" id="ds2"></div>
-      <button class="nav-btn gold-btn" onclick="goTo('pg-m3')">Next →</button>
-    </div>
-  </div>
+<div class="memory">
+  <h2>Us Together</h2>
+  <p>Companionship was the most treasured view...</p>
+  <img src="images/together.jpeg" alt="Us Together Memory">
 </div>
 
-<!-- ═══════ MEMORY 3 ═══════ -->
-<div class="page" id="pg-m3">
-  <div class="mem-card">
-    <div class="photo-zone" onclick="pick(2)">
-      <img id="img2" src="" style="display:none"/>
-      <div class="ph-placeholder" id="ph2"><div class="bigicon">🪔</div><div class="phtext">Tap to add your photo</div></div>
-      <div class="pg-badge">✦ Memory 3 of 7</div>
-      <img src="images/darshan.jpeg" alt="Darshan Memory">
-    </div>
-    <div class="mem-body">
-      <div class="tag">The Darshan</div>
-      <div class="heading">Mata ke Darshan 🙏</div>
-      <div class="caption">Standing before Mata together, with folded hands and full hearts, we asked for nothing except to always be together. That moment felt complete.</div>
-    </div>
-    <div class="nav-row">
-      <button class="nav-btn" onclick="goTo('pg-m2')">← Back</button>
-      <div class="dots-strip" id="ds3"></div>
-      <button class="nav-btn gold-btn" onclick="goTo('pg-m4')">Next →</button>
-    </div>
-  </div>
+<div class="memory">
+  <h2>The Evening Aarti</h2>
+  <p>Bells, diyas, and devotion under the stars...</p>
+  <img src="images/aarti.jpeg" alt="Evening Aarti Memory">
 </div>
 
-<!-- ═══════ MEMORY 4 ═══════ -->
-<div class="page" id="pg-m4">
-  <div class="mem-card">
-    <div class="photo-zone" onclick="pick(3)">
-      <img id="img3" src="" style="display:none"/>
-      <div class="ph-placeholder" id="ph3"><div class="bigicon">🥰</div><div class="phtext">Tap to add your photo</div></div>
-      <div class="pg-badge">✦ Memory 4 of 7</div>
-      <img src="images/together.jpeg" alt="Us Together Memory">
-    </div>
-    <div class="mem-body">
-      <div class="tag">Us Together</div>
-      <div class="heading">My Favourite View 💛</div>
-      <div class="caption">Not the mountains, not the temple — my favourite view was you, laughing, eyes shining, completely free. That's the image I'll keep forever.</div>
-    </div>
-    <div class="nav-row">
-      <button class="nav-btn" onclick="goTo('pg-m3')">← Back</button>
-      <div class="dots-strip" id="ds4"></div>
-      <button class="nav-btn gold-btn" onclick="goTo('pg-m5')">Next →</button>
-    </div>
-  </div>
+<div class="memory">
+  <h2>The Return</h2>
+  <p>A playful note about “Thuli on the way to Thul.”</p>
+  <img src="images/return.jpeg" alt="Return Memory">
 </div>
 
-<!-- ═══════ MEMORY 5 ═══════ -->
-<div class="page" id="pg-m5">
-  <div class="mem-card">
-    <div class="photo-zone" onclick="pick(4)">
-      <img id="img4" src="" style="display:none"/>
-      <div class="ph-placeholder" id="ph4"><div class="bigicon">🌙</div><div class="phtext">Tap to add your photo</div></div>
-      <div class="pg-badge">✦ Memory 5 of 7</div>
-      <img src="images/aarti.jpeg" alt="Evening Aarti Memory">
-    </div>
-    <div class="mem-body">
-      <div class="tag">The Evening</div>
-      <div class="heading">Aarti Under the Stars 🌙</div>
-      <div class="caption">The bells rang, the diyas glowed, and I reached for your hand. In that moment, surrounded by devotion, I felt the most at peace in my life.</div>
-    </div>
-    <div class="nav-row">
-      <button class="nav-btn" onclick="goTo('pg-m4')">← Back</button>
-      <div class="dots-strip" id="ds5"></div>
-      <button class="nav-btn gold-btn" onclick="goTo('pg-m6')">Next →</button>
-    </div>
-  </div>
+<div class="memory">
+  <h2>The End</h2>
+  <p>Closing with a smile — “Thuli Thul Gayi.”</p>
+  <video controls>
+    <source src="images/end.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
 </div>
 
-<!-- ═══════ MEMORY 6 ═══════ -->
-<div class="page" id="pg-m6">
-  <div class="mem-card">
-    <div class="photo-zone" onclick="pick(5)">
-      <img id="img5" src="" style="display:none"/>
-      <div class="ph-placeholder" id="ph5"><div class="bigicon">🌸</div><div class="phtext">Tap to add your photo</div></div>
-      <div class="pg-badge">✦ Memory 6 of 7</div>
-      <img src="images/return.jpeg" alt="Return Memory">
-    </div>
-    <div class="mem-body">
-      <div class="tag">The Return</div>
-      <div class="heading">Thuli on the way to Thul</div>
-      <div class="caption">🫀</div>
-    </div>
-    <div class="nav-row">
-      <button class="nav-btn" onclick="goTo('pg-m5')">← Back</button>
-      <div class="dots-strip" id="ds6"></div>
-      <button class="nav-btn gold-btn" onclick="goTo('pg-m7')">Next →</button>
-    </div>
-  </div>
-</div>
+<footer>
+  <p>© 2026 Our Vaishno Devi Journey</p>
+</footer>
 
-
-<!-- ═══════ FINAL PAGE ═══════ -->
-<div class="page" id="pg-final">
-  <div class="final-wrap">
-    <span class="bflame">🪔</span>
-    <h3>For You, Always</h3>
-    <!-- ✏️ EDIT THE POEM BELOW — write whatever is in your heart -->
-    <div class="poem">In the mountains of Vaishno,
-where the air is pure and still,
-I found my greatest blessing —
-you, beside me on that hill.
-
-Every chant, every prayer,
-every step on sacred ground,
-felt like Mata was whispering
-that in you, I've been found.
-
-This trip, these moments,
-the way your eyes would glow —
-I'll carry them forever,
-wherever life shall go.</div>
-    <div class="final-sig">— Yours, always &amp; forever ✨</div>
-    <button class="replay-btn" onclick="restart()">🔁 Replay from Start</button>
-  </div>
-</div>
-
-<!-- Hidden file pickers -->
-<input type="file" id="filePicker"  accept="image/*"  style="display:none" onchange="loadImg(event)"/>
-<input type="file" id="vidPicker"   accept="video/*"  style="display:none" onchange="loadVid(event)"/>
-
-<script>
-/* ══ CONFIG ══ */
-const CODE  = "1104";
-const ORDER = ['pg-lock','pg-welcome','pg-m1','pg-m2','pg-m3','pg-m4','pg-m5','pg-m6','pg-m7','pg-final'];
-const MEM_IDS = ['pg-m1','pg-m2','pg-m3','pg-m4','pg-m5','pg-m6','pg-m7'];
-
-let curIdx = 0;
-let entered = "";
-let slot = 0;
-
-/* ── Passcode ── */
-function kp(n) {
-  if (entered.length >= 4) return;
-  entered += n;
-  const b = document.getElementById('b'+(entered.length-1));
-  b.textContent = n; b.classList.add('lit');
-  document.getElementById('err').textContent = '';
-  if (entered.length === 4) setTimeout(check, 280);
-}
-function kdel() {
-  if (!entered.length) return;
-  const i = entered.length-1; entered = entered.slice(0,-1);
-  const b = document.getElementById('b'+i); b.textContent='✦'; b.classList.remove('lit');
-}
-function check() {
-  if (entered === CODE) { goTo('pg-welcome'); }
-  else { document.getElementById('err').textContent='Wrong passcode — try again 🙏'; resetCode(); }
-}
-function resetCode() {
-  entered="";
-  ['b0','b1','b2','b3'].forEach(id=>{
-    const b=document.getElementById(id); b.textContent='✦'; b.classList.remove('lit');
-  });
-}
-function restart(){ resetCode(); goTo('pg-lock'); }
-
-/* ── Navigation ── */
-function goTo(id) {
-  const oldEl = document.getElementById(ORDER[curIdx]);
-  if (oldEl) {
-    oldEl.classList.remove('active');
-    oldEl.classList.add('ex-left');
-    setTimeout(()=>oldEl.classList.remove('ex-left'), 600);
-  }
-  curIdx = ORDER.indexOf(id);
-  if (curIdx < 0) curIdx = 0;
-  const newEl = document.getElementById(id);
-  if (newEl) newEl.classList.add('active');
-  buildDots();
-}
-
-/* ── Dots ── */
-function buildDots() {
-  MEM_IDS.forEach((pid, i) => {
-    const strip = document.getElementById('ds'+(i+1));
-    if (!strip) return;
-    strip.innerHTML = '';
-    MEM_IDS.forEach((_,j)=>{
-      const d = document.createElement('div');
-      d.className = 'ds' + (j===i?' on':'');
-      strip.appendChild(d);
-    });
-  });
-}
-buildDots();
-
-/* ── Photo upload ── */
-function pick(s){ slot=s; document.getElementById('filePicker').click(); }
-function loadImg(e){
-  const f=e.target.files[0]; if(!f) return;
-  const r=new FileReader();
-  r.onload=ev=>{
-    const img=document.getElementById('img'+slot);
-    img.src=ev.target.result; img.style.display='block';
-    const ph=document.getElementById('ph'+slot); if(ph) ph.style.display='none';
-  };
-  r.readAsDataURL(f); e.target.value='';
-}
-
-/* ── Video upload ── */
-function pickVid(){ document.getElementById('vidPicker').click(); }
-function loadVid(e){
-  const f=e.target.files[0]; if(!f) return;
-  const url=URL.createObjectURL(f);
-  const vid=document.getElementById('vid0');
-  vid.src=url; vid.style.display='block';
-  const vph=document.getElementById('vph0'); if(vph) vph.style.display='none';
-  const lbl=document.getElementById('vid-upload-label'); if(lbl) lbl.style.display='none';
-  e.target.value='';
-}
-
-/* ── Stars ── */
-const scene=document.getElementById('scene');
-for(let i=0;i<130;i++){
-  const s=document.createElement('div'); s.className='star';
-  const sz=Math.random()*2.5+.8;
-  s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*75}%;--d:${(Math.random()*4+2).toFixed(1)}s;--op:${(Math.random()*.7+.15).toFixed(2)};animation-delay:${(Math.random()*6).toFixed(1)}s`;
-  scene.appendChild(s);
-}
-
-/* ── Mountains ── */
-document.getElementById('mountains').innerHTML=`<svg viewBox="0 0 1440 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
-  <path d="M0,220 L0,130 Q80,70 180,115 Q280,155 400,90 Q500,35 610,78 Q720,118 840,68 Q960,18 1060,72 Q1160,120 1280,85 Q1360,58 1440,95 L1440,220Z" fill="#13264a" opacity=".7"/>
-  <path d="M0,220 L0,165 Q130,115 280,148 Q430,178 580,132 Q730,88 900,142 Q1060,190 1200,155 Q1320,126 1440,158 L1440,220Z" fill="#1c3660" opacity=".8"/>
-</svg>`;
-
-/* ── Petals ── */
-const pw=document.getElementById('petals-wrap');
-['🌸','🌼','✨','🍀','🌺'].forEach(em=>{
-  for(let i=0;i<3;i++){
-    const p=document.createElement('div'); p.className='petal'; p.textContent=em;
-    p.style.cssText=`left:${Math.random()*100}%;font-size:${Math.random()*.7+.8}rem;animation-duration:${(Math.random()*10+9).toFixed(1)}s;animation-delay:${(Math.random()*15).toFixed(1)}s`;
-    pw.appendChild(p);
-  }
-});
-</script>
 </body>
 </html>
